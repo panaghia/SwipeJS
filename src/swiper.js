@@ -77,69 +77,68 @@ Swiper.prototype.attachEvents = function()
 	}   
 	function touchEnd(e)
 	{ 
-	    
+		function restoreState()
+		{
+			scroller.style.webkitTransition = 'all 500ms ease-in-out';
+			var currentEl = 'page_'+(parseInt(that.currentPage));
+			var offleft = document.getElementById(currentEl).offsetLeft;
+			absX = -offleft; 
+			scroller.style.webkitTransform = 'translate3d('+absX+'px, 0, 0)';  
+			endPos = offleft;  
+			pos = 0;   
+		};      
+		
 		var finalDelta = startPos - endPos; 
-	     (finalDelta);
-		if(finalDelta < 0)
+	    console.log(finalDelta); 
+		if(finalDelta < 0 )
 		{
 			if(that.currentPage > 1)
-			{   
-				scroller.style.webkitTransition = 'all 200ms ease-in-out';
-				var preEl = 'page_'+(parseInt(that.currentPage)-1);
-				var offleft = document.getElementById(preEl).offsetLeft; 
-				absX = -offleft; 
-		  		scroller.style.webkitTransform = 'translate3d('+absX+'px, 0, 0)';  
-			    endPos = offleft;  
-				pos = 0;                                              
-				that.currentPage--; 
-				x$('#page_'+(parseInt(that.currentPage)-1)).xhr('inner', '../book/'+(parseInt(that.currentPage)-1)+'.html');
+			{ 
+				if(finalDelta < -80)
+				{  
+					scroller.style.webkitTransition = 'all 200ms ease-in-out';
+					var preEl = 'page_'+(parseInt(that.currentPage)-1);
+					var offleft = document.getElementById(preEl).offsetLeft; 
+					absX = -offleft; 
+			  		scroller.style.webkitTransform = 'translate3d('+absX+'px, 0, 0)';  
+				    endPos = offleft;  
+					pos = 0;                                              
+					that.currentPage--; 
+					x$('#page_'+(parseInt(that.currentPage)-1)).xhr('inner', '../book/'+(parseInt(that.currentPage)-1)+'.html');
+				}
+				else //no important change, revert to current state
+					restoreState();
 			}   
 			else
-			{
-				scroller.style.webkitTransition = 'all 500ms ease-in-out';
-				var currentEl = 'page_'+(parseInt(that.currentPage));
-				var offleft = document.getElementById(currentEl).offsetLeft;
-				absX = -offleft; 
-				scroller.style.webkitTransform = 'translate3d('+absX+'px, 0, 0)';  
-				endPos = offleft;  
-				pos = 0;
-				
-			}
+				restoreState();
 		}
-		else if(finalDelta > 0)
+		else if(finalDelta > 0 )
 		{ 
 			if(that.currentPage < that.pageNumber)
-			{          
-				scroller.style.webkitTransition = 'all 200ms ease-in-out';                                  
-				var nextEl = 'page_'+(parseInt(that.currentPage)+1);  
+			{
+				if(finalDelta > 80)
+				{          
+					scroller.style.webkitTransition = 'all 200ms ease-in-out';                                  
+					var nextEl = 'page_'+(parseInt(that.currentPage)+1);  
 		   
-				var offleft = document.getElementById(nextEl).offsetLeft;
+					var offleft = document.getElementById(nextEl).offsetLeft;
 		                         
-				absX = -offleft;       
-			   	scroller.style.webkitTransform = 'translate3d('+absX+'px, 0, 0)';  
-			    endPos = offleft;  
-				pos = 0;                                              
-				that.currentPage++;
-			
-				//now fetch content for next page 
-		                                                                                       
-				x$('#page_'+(parseInt(that.currentPage)+1)).xhr('inner', '../book/'+(parseInt(that.currentPage)+1)+'.html');
+					absX = -offleft;       
+				   	scroller.style.webkitTransform = 'translate3d('+absX+'px, 0, 0)';  
+				    endPos = offleft;  
+					pos = 0;                                              
+					that.currentPage++;		
+					//now fetch content for next page   	                                                                                       
+					x$('#page_'+(parseInt(that.currentPage)+1)).xhr('inner', '../book/'+(parseInt(that.currentPage)+1)+'.html');
+				}
+				else  //no relevant change
+					restoreState();
 			}
 			else //there are no pages to show
-			{                                                            
-				scroller.style.webkitTransition = 'all 500ms ease-in-out';
-				var currentEl = 'page_'+(parseInt(that.currentPage));
-				var offleft = document.getElementById(currentEl).offsetLeft;
-				absX = -offleft; 
-				scroller.style.webkitTransform = 'translate3d('+absX+'px, 0, 0)';  
-				endPos = offleft;  
-				pos = 0;
-				
-				
-			}
+				restoreState();
   	
 		}      
-		// final > 0 swipe right
+	   
 	}
 	
 }
