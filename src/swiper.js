@@ -68,7 +68,7 @@ Swiper.prototype.attachEvents = function()
 		pos = delta;  
 		endPos = delta;             
 		 
-		//scroller.style.webkitTransition = '';  
+		scroller.style.webkitTransition = '';  
 		scroller.style.webkitTransform = 'translate3d('+(parseInt(absX)+delta)+'px, 0, 0)';
 		
 		scroller.removeEventListener('touchmove', this); 
@@ -79,7 +79,7 @@ Swiper.prototype.attachEvents = function()
 	{ 
 		function restoreState()
 		{
-			//scroller.style.webkitTransition = 'all 500ms ease-in-out';
+			scroller.style.webkitTransition = 'all 100ms ease-in-out';
 			var currentEl = 'page_'+(parseInt(that.currentPage));
 			var offleft = document.getElementById(currentEl).offsetLeft;
 			absX = -offleft; 
@@ -96,7 +96,7 @@ Swiper.prototype.attachEvents = function()
 			{ 
 				if(finalDelta < -80)
 				{  
-					//scroller.style.webkitTransition = 'all 200ms ease-in-out';
+					scroller.style.webkitTransition = 'all 200ms ease-in-out';
 					var preEl = 'page_'+(parseInt(that.currentPage)-1);
 					var offleft = document.getElementById(preEl).offsetLeft; 
 					absX = -offleft; 
@@ -104,7 +104,7 @@ Swiper.prototype.attachEvents = function()
 				    endPos = offleft;  
 					pos = 0;                                              
 					that.currentPage--; 
-					x$('#page_'+(parseInt(that.currentPage)-1)).xhr('inner', '../book/'+(parseInt(that.currentPage)-1)+'.html');
+				   // x$('#page_'+(parseInt(that.currentPage)-1)).xhr('inner', '../book/'+(parseInt(that.currentPage)-1)+'.html');
 				}
 				else //no important change, revert to current state
 					restoreState();
@@ -118,7 +118,7 @@ Swiper.prototype.attachEvents = function()
 			{
 				if(finalDelta > 80)
 				{          
-					//scroller.style.webkitTransition = 'all 200ms ease-in-out';                                  
+					scroller.style.webkitTransition = 'all 200ms ease-in-out';                                  
 					var nextEl = 'page_'+(parseInt(that.currentPage)+1);  
 		   
 					var offleft = document.getElementById(nextEl).offsetLeft;
@@ -129,7 +129,7 @@ Swiper.prototype.attachEvents = function()
 					pos = 0;                                              
 					that.currentPage++;		
 					//now fetch content for next page   	                                                                                       
-					x$('#page_'+(parseInt(that.currentPage)+1)).xhr('inner', '../book/'+(parseInt(that.currentPage)+1)+'.html');
+					//x$('#page_'+(parseInt(that.currentPage)+1)).xhr('inner', '../book/'+(parseInt(that.currentPage)+1)+'.html');
 				}
 				else  //no relevant change
 					restoreState();
