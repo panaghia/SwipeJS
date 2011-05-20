@@ -103,8 +103,15 @@ Swiper.prototype.attachEvents = function()
 			  		scroller.style.webkitTransform = 'translate3d('+absX+'px, 0, 0)';  
 				    endPos = offleft;  
 					pos = 0;                                              
-					that.currentPage--; 
-				   // x$('#page_'+(parseInt(that.currentPage)-1)).xhr('inner', '../book/'+(parseInt(that.currentPage)-1)+'.html');
+					that.currentPage--;
+					
+					preEl = x$('#page_'+(parseInt(that.currentPage)-1)); 
+					if(!preEl.hasClass('loaded'))
+					{
+				    	preEl.xhr('inner', '../book/'+(parseInt(that.currentPage)-1)+'.html');
+						preEl.addClass('loaded');
+						console.log('ajaxing..');
+					}
 				}
 				else //no important change, revert to current state
 					restoreState();
@@ -128,8 +135,14 @@ Swiper.prototype.attachEvents = function()
 				    endPos = offleft;  
 					pos = 0;                                              
 					that.currentPage++;		
-					//now fetch content for next page   	                                                                                       
-					//x$('#page_'+(parseInt(that.currentPage)+1)).xhr('inner', '../book/'+(parseInt(that.currentPage)+1)+'.html');
+					//now fetch content for next page
+					nextEl = x$('#page_'+(parseInt(that.currentPage)+1)); 
+					if(!nextEl.hasClass('loaded')) 
+					{  	                                                                                       
+						x$('#page_'+(parseInt(that.currentPage)+1)).xhr('inner', '../book/'+(parseInt(that.currentPage)+1)+'.html');
+						nextEl.addClass('loaded');
+						console.log('ajaxing..');
+					}
 				}
 				else  //no relevant change
 					restoreState();
