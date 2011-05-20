@@ -57,8 +57,8 @@ Swiper.prototype.attachEvents = function()
 	
 	function touchStart(e)
 	{
-		e.preventDefault();
-		e.stopPropagation();  
+		//e.preventDefault();
+		//e.stopPropagation();  
 		startPos = pos;            
 		
 		startDelta = e.touches[0].pageX - pos;
@@ -97,7 +97,7 @@ Swiper.prototype.attachEvents = function()
 		{
 			if(that.currentPage > 1)
 			{ 
-				if(finalDelta < -80)
+				if(finalDelta < -100)
 				{  
 					scroller.style.webkitTransition = 'all 200ms ease-in-out';
 					var preEl = 'page_'+(parseInt(that.currentPage)-1);
@@ -126,7 +126,7 @@ Swiper.prototype.attachEvents = function()
 		{ 
 			if(that.currentPage < that.pageNumber)
 			{
-				if(finalDelta > 80)
+				if(finalDelta > 100)
 				{          
 					scroller.style.webkitTransition = 'all 200ms ease-in-out';                                  
 					var nextEl = 'page_'+(parseInt(that.currentPage)+1);  
