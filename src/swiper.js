@@ -56,6 +56,7 @@ Swiper.prototype.attachEvents = function()
 	//scroller.addEventListener('touchend', touchEnd, false); 
 	
 	var yPos = 0;
+	var deltaY = 0;
 	
 	function touchStart(e)
 	{                         
@@ -72,9 +73,11 @@ Swiper.prototype.attachEvents = function()
 	}   
 	function touchMove(e)
 	{   
-		var deltaY = e.touches[0].pageY - yPos;
-		if(deltaY > 0 && window.pageYOffset <= 0)//block top vertical scroll
+		deltaY = e.touches[0].pageY - yPos;  
+		if(deltaY !== yPos)
 			e.preventDefault();
+		//if(deltaY > 0 && window.pageYOffset <= 0)//block top vertical scroll
+		//	e.preventDefault();
 		
 		var delta =  e.touches[0].pageX - startDelta; 
 		pos = delta;  
@@ -91,7 +94,7 @@ Swiper.prototype.attachEvents = function()
 	{ 
 		function restoreState()
 		{
-			scroller.style.webkitTransition = 'all 100ms ease-in-out';
+			scroller.style.webkitTransition = 'all 300ms ease-in-out';
 			var currentEl = 'page_'+(parseInt(that.currentPage));
 			var offleft = document.getElementById(currentEl).offsetLeft;
 			absX = -offleft; 
@@ -107,7 +110,8 @@ Swiper.prototype.attachEvents = function()
 			if(that.currentPage > 1)
 			{ 
 				if(finalDelta < -100)
-				{  
+				{
+					
 					scroller.style.webkitTransition = 'all 200ms ease-in-out';
 					var preEl = 'page_'+(parseInt(that.currentPage)-1);
 					var offleft = document.getElementById(preEl).offsetLeft; 
@@ -122,7 +126,7 @@ Swiper.prototype.attachEvents = function()
 					{
 				    	preEl.xhr('inner', '../book/'+(parseInt(that.currentPage)-1)+'.html');
 						preEl.addClass('loaded');
-						console.log('ajaxing..'+parseInt(that.currentPage-1));
+						//console.log('ajaxing..'+parseInt(that.currentPage-1));
 					}
 				}
 				else //no important change, revert to current state
@@ -136,8 +140,8 @@ Swiper.prototype.attachEvents = function()
 			if(that.currentPage < that.pageNumber)
 			{
 				if(finalDelta > 100)
-				{          
-					scroller.style.webkitTransition = 'all 200ms ease-in-out';                                  
+				{ 
+	   				scroller.style.webkitTransition = 'all 200ms ease-in-out';                                  
 					var nextEl = 'page_'+(parseInt(that.currentPage)+1);  
 		   
 					var offleft = document.getElementById(nextEl).offsetLeft;
@@ -148,13 +152,13 @@ Swiper.prototype.attachEvents = function()
 					pos = 0;                                              
 					that.currentPage++;		
 					//now fetch content for next page
-					nextEl = x$('#page_'+(parseInt(that.currentPage)+1));
+					nextEl = x$('#page_'+(parseInt(that.currentPage)+1)); 
 				  
 					if( parseInt(that.currentPage) < that.pageNumber && !nextEl.hasClass('loaded')) 
 					{  	                                                                                       
 						x$('#page_'+(parseInt(that.currentPage)+1)).xhr('inner', '../book/'+(parseInt(that.currentPage)+1)+'.html');
 						nextEl.addClass('loaded');
-						console.log('ajaxing..'+parseInt(that.currentPage+1));
+						//console.log('ajaxing..'+parseInt(that.currentPage+1));
 					}
 				}
 				else  //no relevant change
