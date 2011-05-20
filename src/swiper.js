@@ -55,8 +55,13 @@ Swiper.prototype.attachEvents = function()
 	//scroller.addEventListener('touchmove', touchMove, false);   
 	//scroller.addEventListener('touchend', touchEnd, false); 
 	
+	var yPos = 0;
+	
 	function touchStart(e)
-	{
+	{                         
+		yPos = e.touches[0].pageY;
+		
+		
 		//e.preventDefault();
 		e.stopPropagation();  
 		startPos = pos;            
@@ -66,7 +71,11 @@ Swiper.prototype.attachEvents = function()
 		scroller.addEventListener('touchend', touchEnd, false);   	
 	}   
 	function touchMove(e)
-	{  
+	{   
+		var deltaY = e.touches[0].pageY - yPos;
+		if(deltaY > 0 && window.pageYOffset <= 0)//block top vertical scroll
+			e.preventDefault();
+		
 		var delta =  e.touches[0].pageX - startDelta; 
 		pos = delta;  
 		endPos = delta;             
