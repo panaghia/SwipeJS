@@ -58,7 +58,7 @@ Swiper.prototype.attachEvents = function()
 	function touchStart(e)
 	{
 		//e.preventDefault();
-		//e.stopPropagation();  
+		e.stopPropagation();  
 		startPos = pos;            
 		
 		startDelta = e.touches[0].pageX - pos;
