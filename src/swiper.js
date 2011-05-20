@@ -31,7 +31,10 @@ Swiper.prototype.init = function()
 	        
    
 	x$('#page_'+this.currentPage).xhr('inner', '../book/'+(this.currentPage)+'.html');
-	x$('#page_'+(this.currentPage+1)).xhr('inner', '../book/'+(this.currentPage+1)+'.html');  
+	x$('#page_'+this.currentPage).addClass('loaded');
+	
+	x$('#page_'+(this.currentPage+1)).xhr('inner', '../book/'+(this.currentPage+1)+'.html');
+	x$('#page_'+(this.currentPage+1)).addClass('loaded');  
    
 }            
 
@@ -89,7 +92,7 @@ Swiper.prototype.attachEvents = function()
 		};      
 		
 		var finalDelta = startPos - endPos; 
-	    console.log(finalDelta); 
+	     
 		if(finalDelta < 0 )
 		{
 			if(that.currentPage > 1)
@@ -106,11 +109,11 @@ Swiper.prototype.attachEvents = function()
 					that.currentPage--;
 					
 					preEl = x$('#page_'+(parseInt(that.currentPage)-1)); 
-					if(!preEl.hasClass('loaded'))
+					if(parseInt(that.currentPage) > 1 && !preEl.hasClass('loaded'))
 					{
 				    	preEl.xhr('inner', '../book/'+(parseInt(that.currentPage)-1)+'.html');
 						preEl.addClass('loaded');
-						console.log('ajaxing..');
+						console.log('ajaxing..'+parseInt(that.currentPage-1));
 					}
 				}
 				else //no important change, revert to current state
@@ -136,12 +139,13 @@ Swiper.prototype.attachEvents = function()
 					pos = 0;                                              
 					that.currentPage++;		
 					//now fetch content for next page
-					nextEl = x$('#page_'+(parseInt(that.currentPage)+1)); 
-					if(!nextEl.hasClass('loaded')) 
+					nextEl = x$('#page_'+(parseInt(that.currentPage)+1));
+				  
+					if( parseInt(that.currentPage) < that.pageNumber && !nextEl.hasClass('loaded')) 
 					{  	                                                                                       
 						x$('#page_'+(parseInt(that.currentPage)+1)).xhr('inner', '../book/'+(parseInt(that.currentPage)+1)+'.html');
 						nextEl.addClass('loaded');
-						console.log('ajaxing..');
+						console.log('ajaxing..'+parseInt(that.currentPage+1));
 					}
 				}
 				else  //no relevant change
