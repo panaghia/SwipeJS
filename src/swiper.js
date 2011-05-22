@@ -108,13 +108,14 @@ Swiper.prototype.attachScrollerEvents = function()
 	}//touchstart   
 
 	function touchMove(e)
-	{   
-	    //deltaY = e.touches[0].pageY - yPos;  block any vertical scroll 
-		//if(deltaY !== yPos)
+	{
+		   
+	    deltaY = e.touches[0].pageY - yPos;
+		//if(deltaY !== yPos)   //block any v-scroll
 		  //  e.preventDefault();  
 			
-		//if(deltaY > 0 && window.pageYOffset <= 0)//block top vertical scroll
-		//	e.preventDefault(); 
+		if(deltaY > 0 && window.pageYOffset <= 0)//block top vertical scroll
+			e.preventDefault(); 
 
 		var delta =  e.touches[0].pageX - startDelta;      		
 		pos = delta;  
@@ -157,7 +158,9 @@ Swiper.prototype.attachScrollerEvents = function()
 			  		scroller.style.webkitTransform = 'translate3d('+absX+'px, 0, 0)';  
 				    endPos = offleft;  
 					pos = 0;                                              
-					that.currentPage--;
+					that.currentPage--;  
+					
+					//document.body.scrollTop = 0;
 
 					preEl = x$('#page_'+(parseInt(that.currentPage)-1)); 
 					if(parseInt(that.currentPage) > 1 && !preEl.hasClass('loaded'))
@@ -191,6 +194,8 @@ Swiper.prototype.attachScrollerEvents = function()
 					that.currentPage++;		
 					//now fetch content for next page
 					nextEl = x$('#page_'+(parseInt(that.currentPage)+1)); 
+					
+				   // document.body.scrollTop = 0;
 
 					if( parseInt(that.currentPage) < that.pageNumber && !nextEl.hasClass('loaded')) 
 					{  	                                                                                       
