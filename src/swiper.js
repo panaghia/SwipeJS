@@ -40,56 +40,94 @@ Swiper.prototype.init = function()
 
 Swiper.prototype.attachEvents = function()
 {         
-                 
+	this.attachScrollerEvents();
+	
+	this.attachImgsEvents();            
+   
+	
+}    
+
+Swiper.prototype.attachImgsEvents = function()
+{ 
+	/*
+	var imgs = document.querySelectorAll('.media_img');   
+	console.log(imgs.length);
+	
+	for(var i=0; i < imgs.length; i++)
+	{
+		imgs[i].addEventListener('touchstart', touchStart, false);
+		function touchStart(e)
+		{
+			
+			imgs[i].addEventListener('touchmove', touchMove, false);
+			imgs[i].addEventListener('touchend', touchEnd, false);
+		} 
+		function touchMove(e)
+		{
+			
+		}   
+		function touchEnd(e)
+		{
+			
+		}
+		
+	}  
+	*/
+	
+}
+
+Swiper.prototype.attachScrollerEvents = function()
+{
 	var absX = 0;
 	var startPos = 0;
 	var startDelta = 0; 
 	var endPos = 0;
 	var pos = 0;
 	var dir = 0;  
-	
+
 	var scroller = document.getElementById('scroller');  
-	
-	
+
+
 	scroller.addEventListener('touchstart', touchStart, false);  
-	//scroller.addEventListener('touchmove', touchMove, false);   
-	//scroller.addEventListener('touchend', touchEnd, false); 
-	
+
 	var yPos = 0;
 	var deltaY = 0;
-	
+
 	function touchStart(e)
 	{                         
 		yPos = e.touches[0].pageY;
-		
-		
+
+
 		//e.preventDefault();
 		e.stopPropagation();  
 		startPos = pos;            
-		
+
 		startDelta = e.touches[0].pageX - pos;
 		scroller.addEventListener('touchmove', touchMove, false);   
 		scroller.addEventListener('touchend', touchEnd, false);   	
-	}   
+	}//touchstart   
+
 	function touchMove(e)
 	{   
-		deltaY = e.touches[0].pageY - yPos;  
-		if(deltaY !== yPos)
-			e.preventDefault();
+	    //deltaY = e.touches[0].pageY - yPos;  block any vertical scroll 
+		//if(deltaY !== yPos)
+		  //  e.preventDefault();  
+			
 		//if(deltaY > 0 && window.pageYOffset <= 0)//block top vertical scroll
-		//	e.preventDefault();
-		
-		var delta =  e.touches[0].pageX - startDelta; 
+		//	e.preventDefault(); 
+
+		var delta =  e.touches[0].pageX - startDelta;      		
 		pos = delta;  
 		endPos = delta;             
-		 
+
 		scroller.style.webkitTransition = '';  
 		scroller.style.webkitTransform = 'translate3d('+(parseInt(absX)+delta)+'px, 0, 0)';
-		
+
 		scroller.removeEventListener('touchmove', this); 
 		scroller.removeEventListener('touchend', this); 
-		
-	}   
+
+	}//touchmove     
+
 	function touchEnd(e)
 	{ 
 		function restoreState()
@@ -102,16 +140,16 @@ Swiper.prototype.attachEvents = function()
 			endPos = offleft;  
 			pos = 0;   
 		};      
-		
+
 		var finalDelta = startPos - endPos; 
-	     
+
 		if(finalDelta < 0 )
 		{
 			if(that.currentPage > 1)
 			{ 
 				if(finalDelta < -100)
 				{
-					
+
 					scroller.style.webkitTransition = 'all 200ms ease-in-out';
 					var preEl = 'page_'+(parseInt(that.currentPage)-1);
 					var offleft = document.getElementById(preEl).offsetLeft; 
@@ -120,7 +158,7 @@ Swiper.prototype.attachEvents = function()
 				    endPos = offleft;  
 					pos = 0;                                              
 					that.currentPage--;
-					
+
 					preEl = x$('#page_'+(parseInt(that.currentPage)-1)); 
 					if(parseInt(that.currentPage) > 1 && !preEl.hasClass('loaded'))
 					{
@@ -143,9 +181,9 @@ Swiper.prototype.attachEvents = function()
 				{ 
 	   				scroller.style.webkitTransition = 'all 200ms ease-in-out';                                  
 					var nextEl = 'page_'+(parseInt(that.currentPage)+1);  
-		   
+
 					var offleft = document.getElementById(nextEl).offsetLeft;
-		                         
+
 					absX = -offleft;       
 				   	scroller.style.webkitTransform = 'translate3d('+absX+'px, 0, 0)';  
 				    endPos = offleft;  
@@ -153,7 +191,7 @@ Swiper.prototype.attachEvents = function()
 					that.currentPage++;		
 					//now fetch content for next page
 					nextEl = x$('#page_'+(parseInt(that.currentPage)+1)); 
-				  
+
 					if( parseInt(that.currentPage) < that.pageNumber && !nextEl.hasClass('loaded')) 
 					{  	                                                                                       
 						x$('#page_'+(parseInt(that.currentPage)+1)).xhr('inner', '../book/'+(parseInt(that.currentPage)+1)+'.html');
@@ -166,9 +204,10 @@ Swiper.prototype.attachEvents = function()
 			}
 			else //there are no pages to show
 				restoreState();
-  	
+
 		}      
-	   
-	}
-	
+
+	} //scroller.touchend
 }
+
+

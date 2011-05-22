@@ -1,64 +1,7 @@
-/*
- * iPad Sized Page CSS
- * last update: 2010-10-03
- * 
- * Copyright (C) 2010 by Davide S. Casali <folletto AT gmail DOT com>
- * Released under BSD License
- * 
- */
-html,body
+.alignLeft
 {
-	margin:0;
-	padding:0;
-}
-
-body {
-  	background: #dcdcdc !important;     
-	height:1024px;
-
-}   
-   
-#wrap
-{
-	width:768px;  
-	overflow-x:scroll;
-}
-
-#scroller
-{
-	width:2304px;
-   /* -webkit-transition: all 500ms ease-in-out;   */
-
-}   
-
-div.page
-{        
-	position:relative;
-	float:left !important;
-	width:768px;
-	height:1024px !important;  
-	display:inline-table;      
-	background-color:#eee;
-   
-}                        
-
-
-
-    
-
-#current
-{
-	
-}        
-
-.page p
-{
-	margin-left:80px;
-	margin-right:80px;  
-}          
-
-.multicolumn
-{
-	/*-webkit-column-width: 180px;
-	-webkit-column-gap: 2em; */
+	float:left;
+	margin-right:15px;
+	margin-bottom:15px;
+	margin-top:15px;
 }
