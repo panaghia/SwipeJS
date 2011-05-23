@@ -26,7 +26,8 @@ body {
 
 #scroller
 {
-	width:2304px;
+	width:2304px;       
+	overflow:hidden;
    /* -webkit-transition: all 500ms ease-in-out;   */
 
 }   
