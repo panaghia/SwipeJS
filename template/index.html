@@ -2,7 +2,17 @@
 <html>
 	<head>                                                    
 		<meta name="viewport" content="width=device-width; initial-scale=1.0; user-scalable=0;">
-		<link rel="stylesheet" href="swipe.css" type="text/css" />  
+		<link rel="stylesheet" href="swipe.css" type="text/css" />
+		<script type="text/javascript">  
+		   //experimental       
+	      //adapt width if device is an iphone or a landscape iPad
+		  if(navigator.userAgent.indexOf("iPhone") > -1 || window.orientation == -90 || window.orientation == 90)
+			   document.write("<meta name = \"viewport\" content = \"width = 768; user-scalable = 0\" />");
+		   else
+			document.write("<meta name=\"viewport\" content=\"width=device-width; initial-scale=1.0; user-scalable=0;\" />"); 
+			
+	         
+		</script>  
 		<link rel="stylesheet" href="../book/book.css" type="text/css" /> 
 		<meta name="viewport" content="width=device-width" />     
 		 <script type="text/javascript" src="../src/xui.js"></script>  
