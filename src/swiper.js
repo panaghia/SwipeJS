@@ -1,3 +1,8 @@
+//SwiperJS
+//COPYRIGHT 2011
+//Sergio Panagia
+//sergio@panaghia.it
+
 function domReady(fn){
 	document.addEventListener('DOMContentLoaded', fn, false);
 } 
