@@ -28,6 +28,9 @@ body {
 {
 	width:2304px;       
 	overflow:hidden;
+	-webkit-transform: perspective(500); 
+    -webkit-transform-style: preserve-3d;
+	-webkit-transform: translate3d(0,0, 0);
    /* -webkit-transition: all 500ms ease-in-out;   */
 
 }   
