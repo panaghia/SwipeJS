@@ -34,7 +34,9 @@ Swiper.prototype.init = function()
 	   
 	}   
 	        
-   
+    //for convention, only first and second pages will be loaded at app start.
+	//so make ajax call and set class 'loaded' - that's !important (see loadPage function)
+	
 	x$('#page_'+this.currentPage).xhr('inner', '../book/'+(this.currentPage)+'.html');
 	x$('#page_'+this.currentPage).addClass('loaded');
 	
@@ -47,38 +49,20 @@ Swiper.prototype.attachEvents = function()
 {         
 	this.attachScrollerEvents();
 	
-	this.attachImgsEvents();            
-   
-	
 }    
 
-Swiper.prototype.attachImgsEvents = function()
-{ 
-	/*
-	var imgs = document.querySelectorAll('.media_img');   
-	console.log(imgs.length);
-	
-	for(var i=0; i < imgs.length; i++)
+Swiper.prototype.loadPage = function(pageNumber, element)
+{
+	//constructor
+	//	pageNumber - the page number to load
+	// the element(page) that will host page content
+	//wait 200ms in order to let animation ends.
+	window.setTimeout(function()
 	{
-		imgs[i].addEventListener('touchstart', touchStart, false);
-		function touchStart(e)
-		{
-			
-			imgs[i].addEventListener('touchmove', touchMove, false);
-			imgs[i].addEventListener('touchend', touchEnd, false);
-		} 
-		function touchMove(e)
-		{
-			
-		}   
-		function touchEnd(e)
-		{
-			
-		}
-		
-	}  
-	*/
-	
+		//console.log('ajaxing..'+pageNumber);
+		element.xhr('inner', '../book/'+pageNumber+'.html');
+		element.addClass('loaded'); //set that page as 'loaded'	
+	}, 200);  
 }
 
 Swiper.prototype.attachScrollerEvents = function()
@@ -177,14 +161,7 @@ Swiper.prototype.attachScrollerEvents = function()
 					 
 					if(parseInt(that.currentPage) > 1 && !preEl.hasClass('loaded'))
 					{
-						//ajax prev page, but wait animation to ends. 
-						window.setTimeout(function()
-						{
-							console.log('ajaxing..'+parseInt(that.currentPage-1));
-							preEl.xhr('inner', '../book/'+(parseInt(that.currentPage)-1)+'.html');
-							preEl.addClass('loaded'); //set that page as 'loaded'
-							
-						}, 200);   					
+						that.loadPage(parseInt(that.currentPage-1), preEl);						
 					}
 				}
 				else //no important change, revert to current state
@@ -216,13 +193,7 @@ Swiper.prototype.attachScrollerEvents = function()
 
 					if( parseInt(that.currentPage) < that.pageNumber && !nextEl.hasClass('loaded')) 
 					{
-						//ajax next page, but wait to flip-page animation to end
-						window.setTimeout(function()
-						{
-							x$('#page_'+(parseInt(that.currentPage)+1)).xhr('inner', '../book/'+(parseInt(that.currentPage)+1)+'.html');
-							nextEl.addClass('loaded');
-							console.log('ajaxing..'+parseInt(that.currentPage+1)); 
-						}, 200);						
+						that.loadPage(parseInt(that.currentPage+1), nextEl);  					
 					}
 				}
 				else  //no relevant change
