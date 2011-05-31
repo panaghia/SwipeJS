@@ -83,11 +83,15 @@ Swiper.prototype.attachImgsEvents = function()
 
 Swiper.prototype.attachScrollerEvents = function()
 {
-	var absX = 0;
-	var startPos = 0;
-	var startDelta = 0; 
-	var endPos = 0;
-	var pos = 0;
+	var absX = 0; 
+	
+	var xPos = 0;
+	var deltaX = 0;  	
+	var yPos = 0;
+	var deltaY = 0; 
+	
+	var endX = 0;
+	var startX = 0;
 	var dir = 0;  
 
 	var scroller = document.getElementById('scroller');  
@@ -95,38 +99,35 @@ Swiper.prototype.attachScrollerEvents = function()
 
 	scroller.addEventListener('touchstart', touchStart, false);  
 
-	var yPos = 0;
-	var deltaY = 0;
+
 
 	function touchStart(e)
-	{                         
-		yPos = e.touches[0].pageY;
-
-
+	{
 		//e.preventDefault();
-		e.stopPropagation();  
-		startPos = pos;            
+		e.stopPropagation();
+		                         
+		yPos = e.touches[0].pageY;
+        xPos = startX;            
 
-		startDelta = e.touches[0].pageX - pos;
+		deltaX = e.touches[0].pageX - startX;
 		scroller.addEventListener('touchmove', touchMove, false);   
 		scroller.addEventListener('touchend', touchEnd, false);   	
 	}//touchstart   
 
 	function touchMove(e)
 	{
-		   
-	    deltaY = e.touches[0].pageY - yPos;
+		deltaY = e.touches[0].pageY - yPos;
 		//if(deltaY !== yPos)   //block any v-scroll
 		  //  e.preventDefault();  
 			
 		if(deltaY > 0 && window.pageYOffset <= 0)//block top vertical scroll
 			e.preventDefault(); 
 
-		var delta =  e.touches[0].pageX - startDelta;      		
-		pos = delta;  
-		endPos = delta;             
+		var delta =  e.touches[0].pageX - deltaX;
+		delta = parseInt(delta/1.3); //sample delta		      		
+		startX = endX = delta;             
 
-		scroller.style.webkitTransition = '';  
+		scroller.style.webkitTransition = ''; //erase past transition  
 		scroller.style.webkitTransform = 'translate3d('+(parseInt(absX)+delta)+'px, 0, 0)';
 
 		scroller.removeEventListener('touchmove', this); 
@@ -143,11 +144,11 @@ Swiper.prototype.attachScrollerEvents = function()
 			var offleft = document.getElementById(currentEl).offsetLeft;
 			absX = -offleft; 
 			scroller.style.webkitTransform = 'translate3d('+absX+'px, 0, 0)';  
-			endPos = offleft;  
-			pos = 0;   
+			endX = offleft;  
+			startX = 0;   
 		};      
 
-		var finalDelta = startPos - endPos; 
+		var finalDelta = xPos - endX; 
 
 		if(finalDelta < 0 )
 		{
@@ -161,18 +162,29 @@ Swiper.prototype.attachScrollerEvents = function()
 					var offleft = document.getElementById(preEl).offsetLeft; 
 					absX = -offleft; 
 			  		scroller.style.webkitTransform = 'translate3d('+absX+'px, 0, 0)';  
-				    endPos = offleft;  
-					pos = 0;                                              
+				    endX = offleft;  
+					startX = 0;                                              
 					that.currentPage--;  
 					
 					//document.body.scrollTop = 0;
 
-					preEl = x$('#page_'+(parseInt(that.currentPage)-1)); 
+					preEl = x$('#page_'+(parseInt(that.currentPage)-1));
+					
+					// NOTE ABOUT PAGE ASYNC REQUESTS
+				    //pages are loaded blank.
+					//page initially loaded have class 'loaded'
+					//when a page is ajaxed, a class 'loaded' is added to element
+					 
 					if(parseInt(that.currentPage) > 1 && !preEl.hasClass('loaded'))
 					{
-				    	preEl.xhr('inner', '../book/'+(parseInt(that.currentPage)-1)+'.html');
-						preEl.addClass('loaded');
-						//console.log('ajaxing..'+parseInt(that.currentPage-1));
+						//ajax prev page, but wait animation to ends. 
+						window.setTimeout(function()
+						{
+							console.log('ajaxing..'+parseInt(that.currentPage-1));
+							preEl.xhr('inner', '../book/'+(parseInt(that.currentPage)-1)+'.html');
+							preEl.addClass('loaded'); //set that page as 'loaded'
+							
+						}, 200);   					
 					}
 				}
 				else //no important change, revert to current state
@@ -194,8 +206,8 @@ Swiper.prototype.attachScrollerEvents = function()
 
 					absX = -offleft;       
 				   	scroller.style.webkitTransform = 'translate3d('+absX+'px, 0, 0)';  
-				    endPos = offleft;  
-					pos = 0;                                              
+				    endX = offleft;  
+					startX = 0;                                              
 					that.currentPage++;		
 					//now fetch content for next page
 					nextEl = x$('#page_'+(parseInt(that.currentPage)+1)); 
@@ -203,10 +215,14 @@ Swiper.prototype.attachScrollerEvents = function()
 				   // document.body.scrollTop = 0;
 
 					if( parseInt(that.currentPage) < that.pageNumber && !nextEl.hasClass('loaded')) 
-					{  	                                                                                       
-						x$('#page_'+(parseInt(that.currentPage)+1)).xhr('inner', '../book/'+(parseInt(that.currentPage)+1)+'.html');
-						nextEl.addClass('loaded');
-						//console.log('ajaxing..'+parseInt(that.currentPage+1));
+					{
+						//ajax next page, but wait to flip-page animation to end
+						window.setTimeout(function()
+						{
+							x$('#page_'+(parseInt(that.currentPage)+1)).xhr('inner', '../book/'+(parseInt(that.currentPage)+1)+'.html');
+							nextEl.addClass('loaded');
+							console.log('ajaxing..'+parseInt(that.currentPage+1)); 
+						}, 200);						
 					}
 				}
 				else  //no relevant change
